@@ -43,20 +43,18 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./backend/code/simple-api-student/
-          tags: bagniz/tp-devops/simple-api
+          tags: ${{secrets.DOCKER_USR}}/simple-api:latest
           push: ${{ github.ref == 'refs/heads/master' }}
 
       - name: Build image and push database
         uses: docker/build-push-action@v3
         with:
           context: ./db/
-          tags: bagniz/tp-devops/simple-db
+          tags: ${{secrets.DOCKER_USR}}/simple-db:latest
           push: ${{ github.ref == 'refs/heads/master' }}
 
       - name: Build image and push httpd
         uses: docker/build-push-action@v3
         with:
           context: ./httpd/
-          tags: bagniz/tp-devops/simple-httpd
-          push: ${{ github.ref == 'refs/heads/master' }}
-
+          tags: ${{secrets.DOCKER_USR}}/simple-httpd:latest
