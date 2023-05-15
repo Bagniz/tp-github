@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  backend:
+    container_name: tp-backend
+    build: ./backend/code/simple-api-student
+    restart: on-failure
+    networks:
+      - app-network
+    depends_on:
+      - database
+
+  database:
+    container_name: tp-database
+    image: postgres:14.1-alpine
+    restart: always
+    env_file:
+      - ./db/.env
+    networks:
+      - app-network
+    volumes:
+      - ./db/scripts/:/docker-entrypoint-initdb.d
+      - db-volume:/var/lib/postgresql/data
+  
+  httpd:
+    container_name: tp-httpd
+    build: ./httpd
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+    depends_on:
+      - database
+      - backend
+
+networks:
+  app-network:
+
+volumes:
+  db-volume:
+    
